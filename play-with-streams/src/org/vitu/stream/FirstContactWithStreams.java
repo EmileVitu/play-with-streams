@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -63,7 +64,19 @@ public class FirstContactWithStreams {
 		// Le code est un peu plus long, mais au lieu de tout decouper avant de filtrer les elements, il va d'abord faire le premier element puis le tester et ainsi de suite
 		String s2 = Pattern.compile(" ").splitAsStream(line).filter(s -> s.length() == 3).findFirst().orElseThrow();
 		System.out.println("\nPremière chaîne de longueur 3 : " + s2);
+		// Mais dans ce cas là pourquoi retourne t'on un optional ?
+		// Parce que findFirst(), si il est utilisé sur un Stream<> vide, nous ne saurons pas quoi retourner
 		
-		
+		// Stream<> vide --> Que se passe t'il si nous demandons le premier élément sur un Stream<> qui est vide ? Ca n'a pas de sens, donc cela nous retourne un optional
+		Stream<String> emptyStream = Stream.empty();
+		Optional<String> first = emptyStream.findFirst();
+		boolean empty = first.isEmpty();
+		System.out.println("\nStream vide find first = " + empty);
+		// L'Optional est donc le choix qui a ete fait pour toutes les operations dont l'issue est incertaine, donc si elles retournent des Stream<> vides ou non
+		// Ici c'est evident mais parfois on ne sait pas si le Stream<> retourne sera vide, par exemple
+		Stream<String> emptyStream2 = strings.stream().filter(s -> s.length() > 50);
+		Optional<String> first2 = emptyStream2.findFirst();
+		boolean empty2 = first2.isEmpty();
+		System.out.println("\nStream vide find first2 = " + empty2);
 	}
 }
