@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public class PlayWithOptional {
 	
-	public static void maint(String[] args) {
+	public static void main(String[] args) {
 		// Quelle est la difference entre int10 et integer10 ?
 		// int10 est un type primitif sur lequel nous n'avons pas de methodes
 		// integer10 n'est pas un type primitif, Integer est une classe "wrapper", car c'est une classe qui enveloppe une valeur, ici 10, et qui permet de rajouter des methodes sur cette valeur
