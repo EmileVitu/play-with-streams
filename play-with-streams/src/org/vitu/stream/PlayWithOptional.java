@@ -21,5 +21,20 @@ public class PlayWithOptional {
 		boolean empty = opt.isEmpty();
 		System.out.println("Optional vide : " + empty);
 		System.out.println("Optional vide : " + emptyOpt.isEmpty());
+	
+		String string = opt.get();
+		System.out.println("Contenu de opt = " + string);
+		
+		// String string2 = emptyOpt.get(); Ceci va jeter une erreur car il ne peut pas nous retourner l'ensemble vide, il faut donc utiliser orElseThrow()
+		// Ci-après jette quand même une erreur mais nous permet de nous rappeler de prendre en consideration que l'optional peut etre vide
+		String string2 = emptyOpt.orElseThrow();
+		System.out.println("Contenu de emptyOpt : " + string2);
+	
+		// A savoir, la classe optional ne peut pas contenir "null" !
+		
+		
+		
+		
+		
 	}
 }
