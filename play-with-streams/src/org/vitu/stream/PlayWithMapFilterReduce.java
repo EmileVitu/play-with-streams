@@ -85,7 +85,8 @@ public class PlayWithMapFilterReduce {
 		// Ainsi flatMap() prends une fonction et cette fonction doit retourner un Stream<>, et elle prends les Stream<> créés par cette fonction et les met a plat dans un Stream<> unique
 		// Donc map() ne change pas le nombre d'elements du Stream<>, mais flatMap() si. 		
 		
-		
+		Files.lines(path)
+			.flatMap(split);
 		
 		
 		
