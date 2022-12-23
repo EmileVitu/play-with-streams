@@ -27,14 +27,21 @@ public class PlayWithOptional {
 		
 		// String string2 = emptyOpt.get(); Ceci va jeter une erreur car il ne peut pas nous retourner l'ensemble vide, il faut donc utiliser orElseThrow()
 		// Ci-après jette quand même une erreur mais nous permet de nous rappeler de prendre en consideration que l'optional peut etre vide
-		String string2 = emptyOpt.orElseThrow();
-		System.out.println("Contenu de emptyOpt : " + string2);
+		// String string2 = emptyOpt.orElseThrow();
+		// System.out.println("Contenu de emptyOpt : " + string2);
 	
 		// A savoir, la classe optional ne peut pas contenir "null" !
+		// En effet, le code ci-dessous va jeter une nullPointerException, alors que le code precedent c'est une autre erreur
+		// Optional<String> nullOpt = Optional.of(null);
+		// System.out.println("Contenu de nullOpt = " + nullOpt);
 		
+		// Enfin, nous pouvons tester avec la methode ofNullable() si un optional est null, si il est null, il retourne un optional vide
+		// Donc si nous sommes dans du code et nous ne savons pas si l'objet que nous passons en parametre est null ou pas, nous pouvons appeler ofNullable()
+		Optional<String> nullOpt = Optional.ofNullable(null);
+		boolean empty2 = nullOpt.isEmpty();
+		System.out.println("nullOpt is empty = " + empty2);
 		
-		
-		
+
 		
 	}
 }
