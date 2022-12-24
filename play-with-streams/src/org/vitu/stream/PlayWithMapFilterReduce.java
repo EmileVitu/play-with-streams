@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PlayWithMapFilterReduce {
@@ -85,11 +86,26 @@ public class PlayWithMapFilterReduce {
 		// Ainsi flatMap() prends une fonction et cette fonction doit retourner un Stream<>, et elle prends les Stream<> créés par cette fonction et les met a plat dans un Stream<> unique
 		// Donc map() ne change pas le nombre d'elements du Stream<>, mais flatMap() si. 		
 		
+		// Travaillons a présent avec une liste contenant tous les mots du fichier
+		List<String> words = 
 		Files.lines(path)
-			.flatMap(split);
+			.flatMap(split)
+			.collect(Collectors.toList());
+		System.out.println("\nMots du fichier texte :");
+		words.forEach(System.out::println); // Ici nous utilisons la methode forEach() de List<>
 		
+
+		String word = "eleven";
+		Stream<Character> letters = word.chars().mapToObj(letter -> (char)letter);
+		// Ici nous pourrions très bien dire que letters est une fonction, qui prends un string, et retourne un Stream<Character>
+		Function<String, Stream<Character>> toLetters = 
+				w -> w.chars().mapToObj(letter -> (char)letter);
 		
+		System.out.println("\nLettres :");
+		letters.forEach(System.out::println);
 		
+		System.out.println("\nLettres en utilisant la méthode chars :")
+		toLetters.apply("twelve").forEach(System.out::println);
 		
 		
 	}
