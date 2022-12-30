@@ -1,6 +1,7 @@
 package org.vitu.stream.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,7 +38,16 @@ public class Departement {
 		public void setNom(String nom) {
 			this.nom = nom;
 		}
-
+		
+		public void addCommune(Commune commune) {
+			this.communes.add(commune);
+		}
+		
+		// Ceci retourne une version immutable de la List
+		public List<Commune> getCommunes() {
+			return Collections.unmodifiableList(this.communes);
+		}
+		
 		@Override
 		public String toString() {
 			return "Departement [codePostal=" + codePostal + ", nom=" + nom + "]";
