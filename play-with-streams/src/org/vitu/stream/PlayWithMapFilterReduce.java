@@ -120,5 +120,9 @@ public class PlayWithMapFilterReduce {
 		// Maintenant nous ajoutons des caracteres speciaux au fichier lines.txt
 		// Pour ne pas avoir ces caracteres speciaux dans nos Stream<> il nous suffit d'ajouter ces caracteres speciaux au pattern initial (uniquement les espaces)
 		// --> Pattern pattern = Pattern.compile("[ ,:!]");
+		// Si a présent on ajoute "émile" au fichier .txt : Nous sommes sense avoir une erreur, car Java est sensé utiliser des fichiers UTF-8
+		// On peut modifier l'encryptage du fichier en faisant clic droit > propriétés sur le fichier dans le package explorer
+		
+	
 	}
 }
