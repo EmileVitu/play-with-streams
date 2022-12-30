@@ -52,11 +52,11 @@ public class PlayWithMapFilterReduce {
 		// Mais nous voudrions avoir 12 elements dans notre Stream<>, nous pouvons utiliser la technique pattern
 		System.out.println("\nStream sur une ligne découpée par un pattern");
 		
-		Function<String, Stream<String>> split = 
+		Function<String, Stream<String>> toWords = 
 			l -> Pattern.compile(" ").splitAsStream(l);
 		
 		String line = "one two three four";
-		Stream<String> stream = split.apply(line);
+		Stream<String> stream = toWords.apply(line);
 // 			Pattern.compile(" ")
 // 				.splitAsStream(line);
 		stream.forEach(System.out::println);
@@ -64,13 +64,13 @@ public class PlayWithMapFilterReduce {
 		// Ici nous avons mis le pattern de split dans une fonction, et l'appliquons sur la ligne que nous voulons
 		Stream<Stream<String>> streamOfStream =
 		Files.lines(path) // Retourne un Stream<String>
-			.map(split); // Stream<Stream<String>>
+			.map(toWords); // Stream<Stream<String>>
 		
 		long count2 = streamOfStream.count();
 		System.out.println("Count = " + count2); // Nous obtenons toujours 4, car la methode map() ne modifie jamais le nombre d'elements du Stream<> sur lequel elle opere
 		
 		Files.lines(path)
-			.map(split)
+			.map(toWords)
 			.forEach(System.out::println);
 		// Retourne :
 		// java.util.stream.ReferencePipeline$Head@66d33a
@@ -80,7 +80,7 @@ public class PlayWithMapFilterReduce {
 
 		// Maintenant plutot que d'avoir un Stream<> qui contient 4 Stream<> qui contiennent des elements, nous voulons un seul Stream<> avec tous les elements des Stream<Stream<>> remis a plat
 		long countwords = Files.lines(path) // Retourne un Stream<String>
-			.flatMap(split) // Retourne aussi un Stream<String>
+			.flatMap(toWords) // Retourne aussi un Stream<String>
 			.count();
 		System.out.println("Count words : " + countwords);
 		// Ainsi flatMap() prends une fonction et cette fonction doit retourner un Stream<>, et elle prends les Stream<> créés par cette fonction et les met a plat dans un Stream<> unique
@@ -89,7 +89,7 @@ public class PlayWithMapFilterReduce {
 		// Travaillons a présent avec une liste contenant tous les mots du fichier
 		List<String> words = 
 		Files.lines(path)
-			.flatMap(split)
+			.flatMap(toWords)
 			.collect(Collectors.toList());
 		System.out.println("\nMots du fichier texte :");
 		words.forEach(System.out::println); // Ici nous utilisons la methode forEach() de List<>
@@ -98,15 +98,22 @@ public class PlayWithMapFilterReduce {
 		String word = "eleven";
 		Stream<Character> letters = word.chars().mapToObj(letter -> (char)letter);
 		// Ici nous pourrions très bien dire que letters est une fonction, qui prends un string, et retourne un Stream<Character>
-		Function<String, Stream<Character>> toLetters = 
-				w -> w.chars().mapToObj(letter -> (char)letter);
+		Function<String, Stream<Character>> toLetters = w -> w.chars().mapToObj(letter -> (char)letter);
 		
 		System.out.println("\nLettres :");
 		letters.forEach(System.out::println);
 		
-		System.out.println("\nLettres en utilisant la méthode chars :")
+		System.out.println("\nLettres en utilisant la méthode chars :");
 		toLetters.apply("twelve").forEach(System.out::println);
 		
+		// Nous pouvons donc faire un flatMap sur cette exemple aussi, pour avoir un seul Stream<Character>
+		System.out.println("\nLettres du fichier :");
+		Files.lines(path) // Stream<String> : lignes du fichier
+			.flatMap(toWords) // Stream<String> : mots du fichier
+			.flatMap(toLetters) // Stream<Character> : lettres du fichier
+			.distinct() // Pour enlever les doublons
+			.sorted() // Pour les trier par ordre alphabétique
+			.forEach(System.out::println);
 		
 	}
 
