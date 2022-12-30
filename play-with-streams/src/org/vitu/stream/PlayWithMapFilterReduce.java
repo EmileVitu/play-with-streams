@@ -52,8 +52,10 @@ public class PlayWithMapFilterReduce {
 		// Mais nous voudrions avoir 12 elements dans notre Stream<>, nous pouvons utiliser la technique pattern
 		System.out.println("\nStream sur une ligne découpée par un pattern");
 		
+		Pattern pattern = Pattern.compile("[ ,:!]");
+		
 		Function<String, Stream<String>> toWords = 
-			l -> Pattern.compile(" ").splitAsStream(l);
+			l -> pattern.splitAsStream(l);
 		
 		String line = "one two three four";
 		Stream<String> stream = toWords.apply(line);
@@ -113,8 +115,10 @@ public class PlayWithMapFilterReduce {
 			.flatMap(toLetters) // Stream<Character> : lettres du fichier
 			.distinct() // Pour enlever les doublons
 			.sorted() // Pour les trier par ordre alphabétique
-			.forEach(System.out::println);
+			.forEach(System.out::print); // Pour toutes les imprimer sur la meme ligne et non une ligne par lettre pour "println"
 		
+		// Maintenant nous ajoutons des caracteres speciaux au fichier lines.txt
+		// Pour ne pas avoir ces caracteres speciaux dans nos Stream<> il nous suffit d'ajouter ces caracteres speciaux au pattern initial (uniquement les espaces)
+		// --> Pattern pattern = Pattern.compile("[ ,:!]");
 	}
-
 }
