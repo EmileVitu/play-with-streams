@@ -1,4 +1,4 @@
-# code postal département : nom
+# code postal : nom
 Les Avirons (97401)
 Bras-Panon (97402)
 Entre-Deux (97403)
