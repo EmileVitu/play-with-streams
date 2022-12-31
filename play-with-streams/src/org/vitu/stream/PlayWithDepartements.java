@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -38,15 +39,24 @@ public class PlayWithDepartements {
 		// 	.map(toCodeDepartement)
 		// 	.distinct()
 		// 	.forEach(System.out::println);
-						
-		Map<String, List<Commune>> communeByCodeDepartement =
+		
+		// Pour regrouper les sous-stream en list<>, nous pouvons passer un downstream collector au collector groupingBy()
+		Map<String, List<Commune>> communeByCodeDepartementList =
 			communes.stream()
-				.collect(Collectors.groupingBy(toCodeDepartement));
+				.collect(Collectors.groupingBy(toCodeDepartement, Collectors.toList()));
+
+		Map<String, Set<Commune>> communeByCodeDepartementSet =
+				communes.stream()
+					.collect(Collectors.groupingBy(toCodeDepartement, Collectors.toSet()));
 		
-		System.out.println("# of map = " + communeByCodeDepartement.size());
+		System.out.println("# of map = " + communeByCodeDepartementList.size());
+		System.out.println("# of map = " + communeByCodeDepartementSet.size());
 		
-		communeByCodeDepartement.get("93")
+		communeByCodeDepartementList.get("93")
 			.forEach(System.out::println);
+		
+		communeByCodeDepartementSet.get("78")
+		.forEach(System.out::println);
 	}
 
 	private static List<Commune> readCommunes(String path) throws IOException {
