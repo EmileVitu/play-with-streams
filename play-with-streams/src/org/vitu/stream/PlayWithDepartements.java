@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -71,6 +72,15 @@ public class PlayWithDepartements {
 				// .count();
 				.collect(Collectors.counting()); // Nous pouvons aussi compter aeec un collector
 		System.out.println("# communes dans le 93 : " + count);
+		
+		// Nombre total de communes
+		// Departement departement = departements.get(0);
+		Consumer<Departement> addCommunesToDepartement = 
+				d -> communes.stream()
+					.filter(c -> c.getCodePostal().startsWith(d.getCodePostal()))
+					.forEach(d::addCommune);
+		departements.forEach(addCommunesToDepartement);
+		departements.forEach(d -> System.out.println(d.getNom() + " possède " + d.getCommunes().size() + " communes."));
 	}
 
 	private static List<Commune> readCommunes(String path) throws IOException {
