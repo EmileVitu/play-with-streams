@@ -81,6 +81,10 @@ public class PlayWithDepartements {
 					.forEach(d::addCommune);
 		departements.forEach(addCommunesToDepartement);
 		departements.forEach(d -> System.out.println(d.getNom() + " possède " + d.getCommunes().size() + " communes."));
+		
+		// Flatmap
+		long countCommunes = departements.stream().flatMap(d -> d.getCommunes().stream()).count();
+		System.out.println("# communes = " + countCommunes);
 	}
 
 	private static List<Commune> readCommunes(String path) throws IOException {
