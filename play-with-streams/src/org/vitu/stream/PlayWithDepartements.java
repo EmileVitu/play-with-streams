@@ -39,7 +39,14 @@ public class PlayWithDepartements {
 		// 	.distinct()
 		// 	.forEach(System.out::println);
 						
-		Map<String, List<Commune>> map;
+		Map<String, List<Commune>> communeByCodeDepartement =
+			communes.stream()
+				.collect(Collectors.groupingBy(toCodeDepartement));
+		
+		System.out.println("# of map = " + communeByCodeDepartement.size());
+		
+		communeByCodeDepartement.get("93")
+			.forEach(System.out::println);
 	}
 
 	private static List<Commune> readCommunes(String path) throws IOException {
