@@ -5,8 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FirstContactWithStreams {
@@ -78,5 +80,9 @@ public class FirstContactWithStreams {
 		Optional<String> first2 = emptyStream2.findFirst();
 		boolean empty2 = first2.isEmpty();
 		System.out.println("\nStream vide find first2 = " + empty2);
+		
+		//Regroupement par longueur
+		Map<Integer, List<String>> map = strings.stream().collect(Collectors.groupingBy(s -> s.length()));
+		map.forEach((key, value) -> System.out.println(key + " -> " + value));
 	}
 }
