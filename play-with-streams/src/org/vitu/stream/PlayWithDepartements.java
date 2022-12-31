@@ -94,7 +94,8 @@ public class PlayWithDepartements {
 		// Le departement qui a le plus de communes
 		// communes {78=4, 974=23, 93=4}
 		Map.Entry<String, Long> maxEntry = numberOfCommunesByCodeDepartement.entrySet().stream()
-				.max(Comparator.comparing(entry -> entry.getValue()))
+				// .max(Comparator.comparing(entry -> entry.getValue()))
+				.max(Map.Entry.comparingByValue())						// Equivalent a la ligne precedente
 				.orElseThrow();											// Car le max() nous retourne un optional
 		String maxCodeDepartement = maxEntry.getKey();
 		Long maxCountOfCommunes = maxEntry.getValue();
