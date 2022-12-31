@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.vitu.stream.model.Commune;
 import org.vitu.stream.model.Departement;
 
 public class PlayWithDepartements {
@@ -15,12 +17,48 @@ public class PlayWithDepartements {
 	public static void main(String[] args) throws IOException {
 		
 		// Appel a la methode
-		List<Departement> departements = readDepartements("files/departements.txt");
+		String path = "files/departements.txt";
+		List<Departement> departements = readDepartements(path);
 		
 		departements.forEach(System.out::println);
 		
-		Path pathToCommunes = Path.of("files/communes.txt");
+		List<Commune> communes = readCommunes("files/communes.txt");
+		System.out.println("# Communes = " + communes.size());
 		
+		// Maintenant pour distribuer les communes par departement, nous allons utiliser l'API Collectors dans une table de hashage
+		
+		// D'abord nous allons creer la function qui nous retournera le departement en fonction de la commnune
+		Function<Commune, String> toCodeDepartement = 
+			commune -> 
+				commune.getCodePostal().startsWith("97") ?
+					commune.getCodePostal().substring(0, 3) : 
+					commune.getCodePostal().substring(0, 2);
+		// Maintenant pour tester que notre fonction fonctionne bien		
+		// communes.stream()
+		// 	.map(toCodeDepartement)
+		// 	.distinct()
+		// 	.forEach(System.out::println);
+						
+		Map<String, List<Commune>> map;
+	}
+
+	private static List<Commune> readCommunes(String path) throws IOException {
+		Path pathToCommunes = Path.of(path);
+		
+		Predicate<String> isComment = line -> line.startsWith("#");
+
+		Function<String, String> toNom = l -> l.substring(0,l.indexOf(" ("));
+		
+		Function<String, String> toCodePostal = l -> l.substring(l.indexOf(" (") + 2, l.length() - 1);
+		
+		Function<String, Commune> toCommune = l -> new Commune(toNom.apply(l), toCodePostal.apply(l));
+		
+		List<Commune> communes = 
+			Files.lines(pathToCommunes)
+				.filter(isComment.negate())
+				.map(toCommune)
+				.collect(Collectors.toList());
+		return communes;
 	}
 
 	private static List<Departement> readDepartements(String path) throws IOException {
@@ -54,4 +92,10 @@ public class PlayWithDepartements {
 	// System.out.println("code postal = " + codePostal);
 	// System.out.println("nom = " + nom);
 	
+	// String line = "La Plaine-des-Palmistes (97406)";
+	
+	// String nom = line.substring(0, line.indexOf(" ("));
+	// String codePostal = line.substring(line.indexOf(" (" ) + 2,  line.length() - 1);		
+	// System.out.println("nom = " + nom);
+	// System.out.println("code postal = " + codePostal);
 }
