@@ -83,7 +83,9 @@ public class PlayWithDepartements {
 		departements.forEach(d -> System.out.println(d.getNom() + " possède " + d.getCommunes().size() + " communes."));
 		
 		// Flatmap
-		long countCommunes = departements.stream().flatMap(d -> d.getCommunes().stream()).count();
+		Function<Departement, Stream<Commune>> flatMapper = d -> d.getCommunes().stream()
+		
+		long countCommunes = departements.stream().flatMap(flatMapper).count();
 		System.out.println("# communes = " + countCommunes);
 	}
 
