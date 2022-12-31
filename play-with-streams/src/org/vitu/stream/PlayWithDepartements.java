@@ -52,11 +52,25 @@ public class PlayWithDepartements {
 		System.out.println("# of map = " + communeByCodeDepartementList.size());
 		System.out.println("# of map = " + communeByCodeDepartementSet.size());
 		
+		Map<String, Long> numberOfCommunesByCodeDepartement = 
+			communes.stream()
+				.collect(
+						Collectors.groupingBy(
+								toCodeDepartement, 
+								Collectors.counting())
+						);
+		System.out.println("# communes " + numberOfCommunesByCodeDepartement);
+		
 		communeByCodeDepartementList.get("93")
 			.forEach(System.out::println);
 		
 		communeByCodeDepartementSet.get("78")
 		.forEach(System.out::println);
+		
+		long count = communeByCodeDepartementList.get("93").stream()
+				// .count();
+				.collect(Collectors.counting()); // Nous pouvons aussi compter aeec un collector
+		System.out.println("# communes dans le 93 : " + count);
 	}
 
 	private static List<Commune> readCommunes(String path) throws IOException {
