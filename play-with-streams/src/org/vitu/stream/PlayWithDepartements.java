@@ -3,13 +3,16 @@ package org.vitu.stream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.vitu.stream.model.Commune;
 import org.vitu.stream.model.Departement;
@@ -83,10 +86,19 @@ public class PlayWithDepartements {
 		departements.forEach(d -> System.out.println(d.getNom() + " possède " + d.getCommunes().size() + " communes."));
 		
 		// Flatmap
-		Function<Departement, Stream<Commune>> flatMapper = d -> d.getCommunes().stream()
+		Function<Departement, Stream<Commune>> flatMapper = d -> d.getCommunes().stream();
 		
 		long countCommunes = departements.stream().flatMap(flatMapper).count();
 		System.out.println("# communes = " + countCommunes);
+		
+		// Le departement qui a le plus de communes
+		// communes {78=4, 974=23, 93=4}
+		Map.Entry<String, Long> maxEntry = numberOfCommunesByCodeDepartement.entrySet().stream()
+				.max(Comparator.comparing(entry -> entry.getValue()))
+				.orElseThrow();											// Car le max() nous retourne un optional
+		String maxCodeDepartement = maxEntry.getKey();
+		Long maxCountOfCommunes = maxEntry.getValue();
+		System.out.println(maxCodeDepartement + " -> " + maxCountOfCommunes);
 	}
 
 	private static List<Commune> readCommunes(String path) throws IOException {
